@@ -1,25 +1,46 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { useEffect, useState } from 'react';
+import StarshipsCard from './components/StarshipsCard';
+import { getAllStarships } from './services/starships-api';
+import Header from './components/Header';
+
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+  let [starships, setStarships] = useState([])
+  
+  
+  let getData = async () => {
+    let allStarships = await getAllStarships()
+    console.log(allStarships)
 
+    let starshipComponents = allStarships.results.map((item) => {
+      //console.log(item)
+      return (
+        <div className='starships'>  
+            <StarshipsCard 
+              name={item.name} 
+            />
+          </div>
+      )
+     })
+
+    setStarships(starshipComponents)
+   }
+
+  useEffect(() => {
+    getData("");
+  }, []);
+  
+
+  return(
+    <div className='mainPage'>
+      <Header />
+      <div className="parent">
+         {starships}
+         </div>
+    </div>
+  )
+ }
 export default App;
